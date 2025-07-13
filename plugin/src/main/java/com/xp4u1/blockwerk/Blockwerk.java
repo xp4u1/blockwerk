@@ -2,6 +2,7 @@ package com.xp4u1.blockwerk;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.player.PlayerChooseInitialServerEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -20,5 +21,11 @@ public class Blockwerk {
     public void onProxyInitialization(ProxyInitializeEvent event) {
         kubernetesBridge = new KubernetesBridge(logger, server);
         server.getScheduler().buildTask(this, kubernetesBridge::watchPods).schedule();
+    }
+
+    @Subscribe
+    public void onJoin(PlayerChooseInitialServerEvent event) {
+        // todo: lobby selection
+        event.setInitialServer(server.getAllServers().stream().findFirst().get());
     }
 }
