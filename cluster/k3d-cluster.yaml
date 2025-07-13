@@ -1,0 +1,15 @@
+apiVersion: k3d.io/v1alpha3
+kind: Simple
+name: blockwerk
+servers: 1
+agents: 0
+
+ports:
+  - port: 25565:30001
+
+options:
+  k3s:
+    extraArgs:
+      - arg: "--disable=traefik"
+        nodeFilters:
+          - server:*
