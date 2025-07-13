@@ -41,11 +41,16 @@ For Paper servers to work correctly:
 
 - You must accept the EULA (`eula.txt`)
 - Set `online-mode=false` in `server.properties`
+- Disable BungeeCord in `spigot.yml`
 - Enable Velocity support in `config/paper-global.yml`
 
 The Velocity secret is automatically configured by the Kubernetes cluster.
 
 ```yaml
+# spigot.yml
+settings:
+  bungeecord: false
+
 # config/paper-global.yml
 velocity:
   enabled: true
