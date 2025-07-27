@@ -34,7 +34,7 @@ public class Blockwerk {
         server.getScheduler().buildTask(this, kubernetesBridge::watchPods).schedule();
 
         if (config.lobby.enabled)
-            server.getEventManager().register(this, new LobbyHandler(server, config));
+            server.getEventManager().register(this, new LobbyHandler(server, logger, config));
     }
 
     /**
