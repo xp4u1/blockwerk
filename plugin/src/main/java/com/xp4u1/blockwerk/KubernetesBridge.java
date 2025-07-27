@@ -14,18 +14,21 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.function.Consumer;
 
 public final class KubernetesBridge {
     private final Logger logger;
     private final ProxyServer server;
+    private final Consumer<Runnable> taskScheduler;
     private final CoreV1Api api;
 
     private static final String NAMESPACE = "blockwerk";
     private static final String LABEL_SELECTOR = "app=paper";
 
-    public KubernetesBridge(Logger logger, ProxyServer server) {
+    public KubernetesBridge(Logger logger, ProxyServer server, Consumer<Runnable> taskScheduler) {
         this.logger = logger;
         this.server = server;
+        this.taskScheduler = taskScheduler;
 
         try {
             ApiClient client = Config.defaultClient();
@@ -73,7 +76,7 @@ public final class KubernetesBridge {
             }
         } catch (Exception e) {
             logger.error("Kubernetes watch failed ({}). Restarting...", e.getMessage());
-            watchPods();
+            taskScheduler.accept(this::watchPods);
         }
     }
 

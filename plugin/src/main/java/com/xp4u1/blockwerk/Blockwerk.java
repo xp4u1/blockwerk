@@ -19,7 +19,7 @@ public class Blockwerk {
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        kubernetesBridge = new KubernetesBridge(logger, server);
+        kubernetesBridge = new KubernetesBridge(logger, server, this::schedule);
         server.getScheduler().buildTask(this, kubernetesBridge::watchPods).schedule();
     }
 
@@ -27,5 +27,14 @@ public class Blockwerk {
     public void onJoin(PlayerChooseInitialServerEvent event) {
         // todo: lobby selection
         event.setInitialServer(server.getAllServers().stream().findFirst().get());
+    }
+
+    /**
+     * Start a task using Velocity's scheduler.
+     *
+     * @param task Function to execute
+     */
+    public void schedule(Runnable task) {
+        server.getScheduler().buildTask(this, task).schedule();
     }
 }
