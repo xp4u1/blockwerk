@@ -25,6 +25,7 @@ dependencies {
     compileOnly("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
     annotationProcessor("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
 
+    implementation("com.electronwill.night-config:toml:3.8.2")
     implementation("io.kubernetes:client-java:15.0.1")
 }
 

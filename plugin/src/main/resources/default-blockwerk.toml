@@ -1,0 +1,28 @@
+[kubernetes]
+# The Kubernetes namespace where your Minecraft pods are running. Blockwerk
+# watches this namespace for servers matching the selector below.
+namespace = "blockwerk"
+
+# A Kubernetes label selector used to identify Minecraft server pods. Only pods
+# matching this selector will be registered as game servers.
+label-selector = "app=paper"
+
+[lobby]
+# Dynamically created lobby servers cannot be pre-registered in velocity.toml.
+# Blockwerk automatically handles this by dynamically selecting a lobby server
+# whenever a player connects to the proxy.
+#
+# If you want to override this behavior and implement your own lobby selection
+# logic using a custom Velocity event listener, you can disable this feature.
+enabled = true
+
+# Server name selector (regular expression)
+#
+# Blockwerk registers each Kubernetes pod as a Velocity server using its pod
+# name. This regex is used to match which servers should be considered as
+# "lobby" servers.
+#
+# Example: "(lobby|hub)-.*" will match names like:
+# - lobby-7685cc994f-2m4zr
+# - hub-656875f54-xpm99
+server-selector = "(lobby|hub)-.*"

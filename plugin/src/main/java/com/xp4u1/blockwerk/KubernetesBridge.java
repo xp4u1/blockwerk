@@ -19,15 +19,19 @@ import java.util.function.Consumer;
 public final class KubernetesBridge {
     private final Logger logger;
     private final ProxyServer server;
+    private final BlockwerkConfig config;
     private final Consumer<Runnable> taskScheduler;
     private final CoreV1Api api;
 
-    private static final String NAMESPACE = "blockwerk";
-    private static final String LABEL_SELECTOR = "app=paper";
-
-    public KubernetesBridge(Logger logger, ProxyServer server, Consumer<Runnable> taskScheduler) {
+    public KubernetesBridge(
+            Logger logger,
+            ProxyServer server,
+            BlockwerkConfig config,
+            Consumer<Runnable> taskScheduler
+    ) {
         this.logger = logger;
         this.server = server;
+        this.config = config;
         this.taskScheduler = taskScheduler;
 
         try {
@@ -48,9 +52,18 @@ public final class KubernetesBridge {
     public void watchPods() {
         try {
             Call call = api.listNamespacedPodCall(
-                    NAMESPACE, null, null, null, null,
-                    LABEL_SELECTOR, null, null, null,
-                    null, true, null
+                    config.kubernetes.namespace,
+                    null,
+                    null,
+                    null,
+                    null,
+                    config.kubernetes.labelSelector,
+                    null,
+                    null,
+                    null,
+                    null,
+                    true,
+                    null
             );
             Watch<V1Pod> watch = Watch.createWatch(
                     api.getApiClient(),
